@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board">
+
+	<insert id="bWrite" parameterType="board">
+		insert into BOARDDTO VALUES
+		(boarddto_SEQ.NEXTVAL,#{BWRITER},#{BTITLE},#{BCONTENT},SYSDATE,0,#{BFILENAME})
+	</insert>
+
+	<select id="bListCount" resultType="int">
+		SELECT COUNT(*) FROM BOARDDTO
+	</select>
+
+	<select id="bList" parameterType="paging" resultType="board">
+		SELECT  BNO, BWRITER ,BTITLE, BCONTENT, SUBSTR(BDATE,4,10)BDATE,BHIT,BFILENAME 
+		FROM BLIST WHERE RN BETWEEN #{startRow} AND #{endRow} ORDER BY BDATE DESC
+	</select>
+
+	<update id="bHit">
+		UPDATE BOARDDTO SET BHIT = BHIT + 1 WHERE BNO =
+		#{BNO}
+	</update>
+
+	<select id="bView" parameterType="int" resultType="board">
+		SELECT BNO, BWRITER ,BTITLE, BCONTENT, SUBSTR(BDATE,1,10)BDATE,BHIT,BFILENAME  FROM
+		BOARDDTO WHERE BNO = #{BNO}
+	</select>
+	
+	<update id="bModify" parameterType="board">
+		UPDATE BOARDDTO SET BWRITER=#{BWRITER}, BTITLE=#{BTITLE}, BCONTENT=#{BCONTENT}, BFILENAME=#{BFILENAME} 
+		WHERE BNO=#{BNO}
+	</update>
+	
+	<delete id="bDelete" parameterType="int">
+		DELETE FROM BOARDDTO WHERE BNO=#{BNO}
+	</delete>
+		
+	<select id="bsWriter" parameterType="String" resultType="board">
+		SELECT * FROM BOARDDTO WHERE BWRITER LIKE '%'||#{keyword}||'%' ORDER BY BNO DESC
+	</select>
+	
+	<select id="bsTitle" parameterType="String" resultType="board">
+		SELECT * FROM BOARDDTO WHERE BTITLE LIKE '%'||#{keyword}||'%' ORDER BY BNO DESC
+	</select>
+	
+	<select id="bsContent" parameterType="String" resultType="board">
+		SELECT * FROM BOARDDTO WHERE BCONTENT LIKE '%'||#{keyword}||'%' ORDER BY BNO DESC
+	</select>
+	<!-- ///////////////////////////////////////////////////////////////// -->
+
+	<select id="rList" parameterType="int" resultType="review">
+		SELECT * FROM
+		REVIEWDTO WHERE RBNO=#{RBNO} ORDER BY RNO DESC
+	</select>
+	
+	<insert id="rWrite" parameterType="review">
+		INSERT INTO REVIEWDTO VALUES(#{RBNO}, REVIEW_SEQ.NEXTVAL, #{RWRITER}, #{RCONTENT},SYSDATE)
+	</insert>
+	
+	<delete id="rDelete" parameterType="review">
+		DELETE FROM REVIEWDTO WHERE RNO=#{RNO}
+	</delete>	
+
+	
+</mapper>
+
+
+
+

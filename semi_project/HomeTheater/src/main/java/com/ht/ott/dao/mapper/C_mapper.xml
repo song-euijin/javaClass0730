@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Content">
+
+<select resultType="int" id="cListCount">SELECT COUNT(*) FROM CONTENTDTO </select>
+
+<select resultType="content" id="cpopularList" parameterType="paging">SELECT * FROM CPLIST WHERE RN BETWEEN #{startRow} AND #{endRow} </select>
+
+<select resultType="content" id="cnameList" parameterType="paging">SELECT * FROM CNLIST WHERE RN BETWEEN #{startRow} AND #{endRow} </select>
+
+<select resultType="content" id="crecentList" parameterType="paging">SELECT * FROM CRLIST WHERE RN BETWEEN #{startRow} AND #{endRow} </select>
+
+<select resultType="content" id="cSearch" parameterType="String">SELECT * FROM CONTENTDTO WHERE CNAME LIKE '%'||#{keyword}||'%' ORDER BY CNUM DESC </select>
+
+<select resultType="content" id="cpopularSlider">SELECT * FROM CONTENTDTO ORDER BY CHIT DESC </select>
+
+<select resultType="content" id="cnameSlider">SELECT * FROM CONTENTDTO ORDER BY CNAME </select>
+
+<select resultType="content" id="crecentSlider">SELECT * FROM CONTENTDTO ORDER BY CDATE DESC </select>
+
+<select resultType="String" id="DoubleCheck" parameterType="content">SELECT CNAME FROM ContentDTO WHERE CNAME=#{CName} AND CDATE=#{CDate} </select>
+
+<insert id="cAdd" parameterType="content">INSERT INTO ContentDTO VALUES(CNUM_SEQ.nextval,#{CPoster},#{CName},#{CSummery},#{CDate},0) </insert>
+
+<select resultType="content" id="cView" parameterType="int">SELECT * FROM ContentDTO WHERE CNUM=#{CNum} </select>
+
+<delete id="cDelete" parameterType="int">DELETE FROM MARKDTO WHERE KNUM=#{CNum}</delete>
+
+<delete id="cDelete2" parameterType="int">DELETE FROM ContentDTO WHERE CNUM=#{CNum} </delete>
+
+<update id="cModify" parameterType="content">UPDATE ContentDTO SET CPOSTER = #{CPoster},CNAME=#{CName},CSUMMERY=#{CSummery},CDATE=#{CDate} WHERE CNUM = #{CNum} </update>
+
+<update id="cHit" parameterType="int">UPDATE ContentDTO SET CHIT = CHIT + 1 WHERE CNUM = #{CNum} </update>
+
+<select resultType="int" id="kLike" parameterType="mark">SELECT COUNT(*) FROM MarkDTO WHERE KNUM = #{KNUM} AND KLIKE = 1 </select>
+
+<select resultType="int" id="kDisLike" parameterType="mark">SELECT COUNT(*) FROM MarkDTO WHERE KNUM = #{KNUM} AND KLIKE = -1 </select>
+
+<select resultType="int" id="kSearch" parameterType="mark">SELECT SUM(KLIKE) FROM MarkDTO WHERE KID=#{KID} AND KNUM=#{KNUM} </select>
+
+<insert id="kLikeAdd" parameterType="mark">INSERT INTO MarkDTO VALUES(#{KID},#{KNUM},1) </insert>
+
+<delete id="kDelete" parameterType="mark">DELETE FROM MarkDTO WHERE KID=#{KID} AND KNUM=#{KNUM} </delete>
+
+<insert id="kDisLikeAdd" parameterType="mark">INSERT INTO MarkDTO VALUES(#{KID},#{KNUM},-1) </insert>
+
+<insert id="kAdd" parameterType="mark">INSERT INTO MarkDTO VALUES(#{KID},#{KNUM},0) </insert>
+
+</mapper>
