@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+	<insert id="mJoin" parameterType="member">
+		INSERT INTO MEMBERDTO
+		VALUES(#{MId},#{MPw},#{MName},#{MEmail},#{MPhone})
+	</insert>
+
+	<select id="mLogin" parameterType="member" resultType="member">
+		SELECT * FROM MEMBERDTO WHERE MID=#{MId} AND MPW=#{MPw}
+	</select>
+
+	<select id="mListCount" resultType="int" >
+		SELECT COUNT(*) FROM MEMBERDTO
+	</select>
+
+	<select id="mList" parameterType="paging" resultType="member">
+		SELECT * FROM MLIST WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<select id="mView" parameterType="String" resultType="member">
+		SELECT * FROM MEMBERDTO WHERE MID = #{MId}
+	</select>
+	
+	<update id="mModify" parameterType="member">
+		UPDATE MEMBERDTO
+		SET MPW=#{MPw},MNAME=#{MName},MEMAIL=#{MEmail},MPHONE=#{MPhone}
+		WHERE MID=#{MId}
+	</update>
+
+	<delete id="mDelete" parameterType="String">
+		DELETE FROM MEMBERDTO WHERE MID=#{MId}
+	</delete>
+	
+	<select id="idOverlap" parameterType="String" resultType="String">
+		SELECT MID FROM MEMBERDTO WHERE MID=#{mId}
+	</select>
+	
+	<select id="phoneOverlap" parameterType="String" resultType="String">
+		SELECT MPHONE FROM MEMBERDTO WHERE MPHONE=#{mPhone}
+	</select>
+
+</mapper>
